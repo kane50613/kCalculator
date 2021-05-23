@@ -1,6 +1,6 @@
 class SyntaxErr extends Error {
     constructor(position, char, message) {
-        super(message ? message : `${char} at ${position?.row || 'unknown'}:${position?.col || 'unknown'}`);
+        super(message ? `${message} \nat ${position?.row || 'unknown'}:${position?.col || 'unknown'}` : `${char} at ${position?.row || 'unknown'}:${position?.col || 'unknown'}`);
         this.name = 'SyntaxErr'
     }
 }
