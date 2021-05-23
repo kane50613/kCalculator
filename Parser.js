@@ -5,23 +5,33 @@ const SyntaxErr = require("./Error/SyntaxErr");
 
 class Parser {
     static parse = async (tokens, position) => {
-        if(tokens.filter(x => x.type === Token.LPAREN).length > tokens.filter(x => x.type === Token.RPAREN))
-            throw new SyntaxErr(position, null, 'missing `)`')
-        if(tokens.filter(x => x.type === Token.LPAREN).length < tokens.filter(x => x.type === Token.RPAREN))
-            throw new SyntaxErr(position, null, 'missing `(`')
+        let lParen, rParen
 
-        if(tokens.findIndex(x => x.type === Token.RPAREN) < tokens.findIndex(x => x.type === Token.LPAREN))
-            throw new SyntaxErr(position, null, 'missing `(`')
+        do {
+            lParen = rParen = undefined
+            for(let i = 0; i < tokens.length; i++) {
+                if(tokens[i]?.type === Token.LPAREN)
+                    lParen = i
+                if(tokens[i]?.type === Token.RPAREN) {
+                    rParen = i
+                    break
+                }
+            }
 
-        let lParen = tokens.findIndex(x => x.type === Token.LPAREN),
-            rParen = Parser.getArrayFromTo(tokens, lParen).findIndex(x => x.type === Token.RPAREN)
-        if(lParen !== -1)
-            tokens = Parser.replaceArrayFromTo(
-                tokens,
-                lParen,
-                rParen,
-                await this.parse(Parser.getArrayFromTo(tokens, lParen + 1, rParen), position)
-            )
+            if(lParen === undefined && rParen !== undefined)
+                throw new SyntaxErr(position, null, 'missing `)`')
+            if(lParen !== undefined && rParen === undefined)
+                throw new SyntaxErr(position, null, 'missing `(`')
+
+            if(lParen !== undefined && rParen !== undefined) {
+                tokens = Parser.replaceArrayFromTo(
+                    tokens,
+                    lParen,
+                    rParen,
+                    await this.parse(Parser.getArrayFromTo(tokens, lParen + 1, rParen), position)
+                )
+            }
+        } while(lParen !== undefined || rParen !== undefined)
 
         if(tokens.length === 1) {
             if(tokens[0] instanceof NumberNode || tokens[0] instanceof BinaryNode)
@@ -32,7 +42,7 @@ class Parser {
         }
 
         if(tokens.length < 3)
-            throw new SyntaxErr(position, tokens[1].toString())
+            throw new SyntaxErr(position)
 
         const makeNode = async pos => new BinaryNode(
             tokens[pos - 1] instanceof BinaryNode || tokens[pos - 1] instanceof NumberNode ?
@@ -45,9 +55,8 @@ class Parser {
         )
 
         let plusOrMinus = tokens.findIndex(x => x.type === Token.PLUS || x.type === Token.MINUS)
-        if(plusOrMinus !== -1) {
+        if(plusOrMinus !== -1)
             return await makeNode(plusOrMinus)
-        }
 
         let mulOrDiv = tokens.findIndex(x => x.type === Token.MUL || x.type === Token.DIV)
         if(mulOrDiv !== -1)
