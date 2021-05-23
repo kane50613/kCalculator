@@ -9,11 +9,13 @@ const readline = Readline.createInterface({
 
 async function read() {
     readline.question("KLang> ", a => {
+        if(a.trim().length === 0)
+            return read()
         Lexer.parse(a)
             .then(r => {
-                // console.log(r.tokens.map(x => x.toString()))
+                console.log(`[LexerResult] ${r.tokens}`)
                 Parser.parse(r.tokens, r.position)
-                    .then(p => console.log(p.toString()))
+                    .then(p => console.log(`[ParserResult] ${p}`))
                     .catch(e => console.log(`[${e.name}] ${e.message}`))
                     .finally(read)
             })

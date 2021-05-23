@@ -24,9 +24,11 @@ class Parser {
             )
 
         if(tokens.length === 1) {
+            if(tokens[0] instanceof NumberNode || tokens[0] instanceof BinaryNode)
+                return tokens[0]
             if(tokens[0]?.type === Token.INT || tokens[0]?.type === Token.FLOAT)
-                return new NumberNode(tokens[0].value)
-            else throw new SyntaxErr(position, tokens[0].toString())
+                return new NumberNode(tokens[0]?.value)
+            throw new SyntaxErr(position, tokens[0].toString())
         }
 
         if(tokens.length < 3)
@@ -50,6 +52,7 @@ class Parser {
         let mulOrDiv = tokens.findIndex(x => x.type === Token.MUL || x.type === Token.DIV)
         if(mulOrDiv !== -1)
             return await makeNode(mulOrDiv)
+
         throw new SyntaxErr(position, tokens[0].toString())
     }
 
