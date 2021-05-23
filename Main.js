@@ -19,7 +19,10 @@ async function read() {
                     .catch(e => console.log(`[${e.name}] ${e.message}`))
                     .finally(read)
             })
-            .catch(e => console.log(`[${e.name}] ${e.message}`))
+            .catch(e => {
+                console.log(`[${e.name}] ${e.message}`)
+                read()
+            })
     })
 }
 

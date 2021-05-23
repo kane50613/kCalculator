@@ -46,11 +46,11 @@ class Parser {
 
         const makeNode = async pos => new BinaryNode(
             tokens[pos - 1] instanceof BinaryNode || tokens[pos - 1] instanceof NumberNode ?
-                tokens[pos - 1] :
+                await this.parse([...this.getArrayFromTo(tokens, 0, pos - 1), tokens[pos - 1]], position) :
                 await this.parse(this.getArrayFromTo(tokens, 0, pos), position),
             tokens[pos],
             tokens[pos + 1] instanceof BinaryNode || tokens[pos + 1] instanceof NumberNode ?
-                tokens[pos + 1] :
+                await this.parse([tokens[pos + 1], ...this.getArrayFromTo(tokens, pos + 2)], position) :
                 await this.parse(this.getArrayFromTo(tokens, pos + 1), position),
         )
 
