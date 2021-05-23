@@ -13,7 +13,7 @@ async function read() {
             .then(r => {
                 // console.log(r.tokens.map(x => x.toString()))
                 Parser.parse(r.tokens, r.position)
-                    .then(p => console.log(p.toString()))
+                    .then(p => console.log(p))
                     .catch(e => console.log(`[${e.name}] ${e.message}`))
                     .finally(read)
             })
