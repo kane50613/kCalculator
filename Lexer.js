@@ -1,5 +1,6 @@
 const Token = require("./Token")
 const Position = require("./Position")
+const SyntaxErr = require('./Error/SyntaxErr')
 
 class Lexer {
     constructor(input) {
@@ -8,11 +9,11 @@ class Lexer {
         this.input = input
     }
 
-    static parse(input) {
+    static parse = async (input) => {
         return new Lexer(input.trim())._parse()
     }
 
-    _parse() {
+    _parse = async () => {
         let char = this.input.substr(this.position.index, 1)
 
         if(char.length === 0)
@@ -75,7 +76,7 @@ class Lexer {
             return this._parse()
         }
 
-        //TODO throw error
+        throw new SyntaxErr(this.position, char)
     }
 }
 

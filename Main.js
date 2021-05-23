@@ -8,8 +8,14 @@ const readline = Readline.createInterface({
 
 async function read() {
     readline.question("KLang > ", a => {
-        console.log(Lexer.parse(a))
-        read()
+        Lexer.parse(a)
+            .then(r => {
+                console.log(r)
+                read()
+            })
+            .catch(e => {
+                console.log(e.message)
+            })
     })
 }
 
