@@ -7,7 +7,7 @@ const readline = Readline.createInterface({
 })
 
 async function read() {
-    readline.question("KLang > ", a => {
+    readline.question("KLang> ", a => {
         Lexer.parse(a)
             .then(r => {
                 console.log(r)

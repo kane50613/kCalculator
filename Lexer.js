@@ -1,6 +1,6 @@
 const Token = require("./Token")
 const Position = require("./Position")
-const SyntaxErr = require('./Error/SyntaxErr')
+const IllegalCharErr = require('./Error/IllegalCharErr')
 
 class Lexer {
     constructor(input) {
@@ -76,7 +76,7 @@ class Lexer {
             return this._parse()
         }
 
-        throw new SyntaxErr(this.position, char)
+        throw new IllegalCharErr(this.position, char)
     }
 }
 
