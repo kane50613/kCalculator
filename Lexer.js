@@ -14,10 +14,10 @@ class Lexer {
     }
 
     _parse = async () => {
-        let char = this.input.substr(this.position.index, 1)
+        let char = this.getChar()
 
         if(char.length === 0)
-            return this.tokens
+            return this
 
         if(Token.DIGITS.includes(this.input.substr(this.position.index, 1))) {
             let _num = ''
@@ -56,7 +56,7 @@ class Lexer {
             return this._parse()
         }
         if(char === '*') {
-            this.tokens.push(new Token(Token.MINUS))
+            this.tokens.push(new Token(Token.MUL))
             this.position.nextChar()
             return this._parse()
         }
@@ -77,6 +77,10 @@ class Lexer {
         }
 
         throw new IllegalCharErr(this.position, char)
+    }
+
+    getChar(length = 1) {
+        return this.input.substr(this.position.index, length)
     }
 }
 
