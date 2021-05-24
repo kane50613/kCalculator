@@ -9,7 +9,7 @@ const readline = Readline.createInterface({
 })
 
 async function read() {
-    readline.question("KLang> ", a => {
+    readline.question("KCalculator> ", a => {
         if(a.trim().length === 0)
             return read()
         Lexer.parse(a)
