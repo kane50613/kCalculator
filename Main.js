@@ -1,6 +1,7 @@
 const Readline = require('readline')
 const Lexer = require("./Lexer")
 const Parser = require("./Parser");
+const Executor = require("./Executor");
 
 const readline = Readline.createInterface({
     input: process.stdin,
@@ -15,8 +16,11 @@ async function read() {
             .then(r => {
                 console.log(`[LexerResult] ${r.tokens}`)
                 Parser.parse(r.tokens, r.position)
-                    .then(p => console.log(`[ParserResult] ${p}`))
-                    .catch(e => console.log(`[${e.name}] ${e.message}`))
+                    .then(p => {
+                        console.log(`[ParserResult] ${p}`)
+                        console.log(`[ExecutorResult] ${Executor.calculate(p)}`)
+                    })
+                    .catch(e => console.log(`[ParserError] [${e.name}] ${e.message}`))
                     .finally(read)
             })
             .catch(e => {

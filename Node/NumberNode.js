@@ -6,6 +6,10 @@ class NumberNode {
     toString() {
         return `${this.number}`
     }
+
+    calculate() {
+        return Number(this.number)
+    }
 }
 
 module.exports = NumberNode
