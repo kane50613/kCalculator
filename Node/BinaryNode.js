@@ -12,6 +12,8 @@ class BinaryNode {
     }
 
     calculate() {
+        if(this.operator.type === Token.POWER)
+            return Math.pow(this.leftNode.calculate(), this.rightNode.calculate())
         if(this.operator.type === Token.PLUS)
             return this.leftNode.calculate() + this.rightNode.calculate()
         if(this.operator.type === Token.MINUS)

@@ -45,6 +45,11 @@ class Lexer {
             return this._parse()
         }
 
+        if(char === '^') {
+            this.tokens.push(new Token(Token.POWER))
+            this.position.nextChar()
+            return this._parse()
+        }
         if(char === '+') {
             this.tokens.push(new Token(Token.PLUS))
             this.position.nextChar()

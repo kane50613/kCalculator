@@ -2,6 +2,7 @@ class Token {
     static DIGITS = '0123456789'
     static INT = 'INT'
     static FLOAT = 'FLOAT'
+    static POWER = '^'
     static PLUS = '+'
     static MINUS = '-'
     static MUL = '*'

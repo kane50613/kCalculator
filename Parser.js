@@ -62,6 +62,10 @@ class Parser {
         if(mulOrDiv !== -1)
             return await makeNode(mulOrDiv)
 
+        let pow = tokens.findIndex(x => x.type === Token.POWER)
+        if(pow !== -1)
+            return await makeNode(pow)
+
         throw new SyntaxErr(position, tokens[0].toString())
     }
 
